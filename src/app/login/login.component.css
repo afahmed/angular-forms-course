@@ -15,4 +15,12 @@
   margin-bottom: 10px;
 }
 
+/* input.ng-invalid.ng-touched {
+  border: 2px solid red;
+} */
+
+/* form.ng-invalid.ng-touched {
+  border: 2px solid red;
+} */
+
 

@@ -2,26 +2,73 @@
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>
 
-    <form class="login-form data-form">
+    <form class="login-form data-form" (ngSubmit)="onLogin(loginForm, $event)" #loginForm="ngForm">
 
       <mat-form-field>
 
-        <input matInput type="email" name="email"
-               placeholder="Email">
+        <input 
+          ngModel
+          #email="ngModel" 
+          matInput
+          type="email"
+          name="email"
+          required
+          minlength="3"
+          email
+          placeholder="Email">
+        
+        <mat-error *ngIf="email.errors?.required">The email is mandatory</mat-error>
+        <mat-error *ngIf="email.errors?.minlength">
+          Your email must have minimum {{ email.errors?.minlength.requiredLength }} chars, but it only has 
+          {{ email?.errors.minlength.actualLength }}
+        </mat-error>
+        <mat-error *ngIf="email?.errors?.email">This is not a valid email address</mat-error>
 
       </mat-form-field>
 
       <mat-form-field>
 
-        <input matInput type="password" placeholder="Password">
+        <input 
+          required 
+          ngModel
+          passwordStrength
+          #password="ngModel" 
+          name="password" 
+          matInput 
+          minlength="6"
+          type="password" 
+          placeholder="Password">
+
+          <mat-error *ngIf="password.errors?.required">The password is mandatory</mat-error>
+
+
 
       </mat-form-field>
 
-      <button mat-raised-button color="primary">
+      <ng-container *ngIf="password.errors | onlyOneError:['minlength', 'passwordStrength'] as error">
+
+        <div class="field-message" *ngIf="error?.minlength">
+          Your password must have minium {{ error?.minlength.requiredLength }} chart, but it only has
+          {{ error?.minlength.actualLength }}
+        </div>
+
+        <div class="field-message" *ngIf="error?.passwordStrength">
+          Your password must contain uppercase, lowercase and numeric characters.
+        </div>
+
+      </ng-container>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
         Login
       </button>
 
     </form>
+
+    <div>
+      <div class="class form-val">
+        {{ password.errors | json }}
+      </div>
+    </div>
 
   </mat-card-content>
 </mat-card>
