@@ -12,5 +12,34 @@ import {noop, of} from 'rxjs';
 })
 export class FileUploadComponent {
 
+  @Input()
+  requiredFileType: string;
+  fileName = "";
+
+  fileUploadError = false;
+
+  constructor(private http: HttpClient) {
+
+  }
+
+  onFileSelected(event) {
+
+    const file: File = event.target.files[0];
+    if(file) {
+
+      this.fileName = file.name;
+
+      const formData = new FormData();
+
+      formData.append("thumbnail", file)
+
+      this.http.post("/api/thumbnail-upload", formData)
+        .subscribe();
+
+    }
+
+  }
 
 }
+
+
